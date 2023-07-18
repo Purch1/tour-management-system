@@ -3,6 +3,7 @@ const cors = require('cors');
 const morgan = require('morgan');
 const cookieParser = require('cookie-parser');
 const connectDB = require('./src/config/db');
+const tourTouter = require('./src/routes/tourRoute');
 
 
 const app = express()
@@ -12,7 +13,9 @@ app.use(express.json());
 app.use(cors());
 app.use(cookieParser());
 app.use(morgan('dev'));
+
 // Routes
+app.use('/tour', tourTouter)
 
 connectDB()
 // Start the server
