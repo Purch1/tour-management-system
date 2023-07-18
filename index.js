@@ -3,7 +3,9 @@ const cors = require('cors');
 const morgan = require('morgan');
 const cookieParser = require('cookie-parser');
 const connectDB = require('./src/config/db');
-const tourTouter = require('./src/routes/tourRoute');
+const tourRouter = require('./src/routes/tourRoute');
+const userRouter = require('./src/routes/userRoute');
+const authRouter = require('./src/routes/authRoute');
 
 
 const app = express()
@@ -15,7 +17,9 @@ app.use(cookieParser());
 app.use(morgan('dev'));
 
 // Routes
-app.use('/tour', tourTouter)
+app.use('/tour', tourRouter)
+app.use('/users', userRouter)
+app.use('/auth', authRouter)
 
 connectDB()
 // Start the server

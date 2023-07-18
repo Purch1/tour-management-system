@@ -19,7 +19,7 @@ exports.updateTour = async (req, res) => {
 
     const updatedTour = await TourService.updateTourService(id, req.body);
     return res
-      .status(STATUS_CODE.CREATED)
+      .status(STATUS_CODE.Ok)
       .json({ message: "Successful", data: updatedTour });
   } catch (error) {
     return handleError(error, res);
@@ -27,17 +27,14 @@ exports.updateTour = async (req, res) => {
 };
 
 exports.getAllTour = async (req, res) => {
-    
-    try {
-      const page = parseInt(req.query.page);
+  try {
+    const page = parseInt(req.query.page);
     const getAllTour = await TourService.getAllTourService(page);
-    return res
-      .status(STATUS_CODE.CREATED)
-      .json({
-        message: "Successful",
-        count: getAllTour.length,
-        data: getAllTour,
-      });
+    return res.status(STATUS_CODE.OK).json({
+      message: "Successful",
+      count: getAllTour.length,
+      data: getAllTour,
+    });
   } catch (error) {
     return handleError(error, res);
   }
@@ -53,9 +50,46 @@ exports.getTourById = async (req, res) => {
         .status(STATUS_CODE.NOT_FOUND)
         .json({ error: "Tour not found" });
     }
+    return res.status(STATUS_CODE.Ok).json({ message: "Successful", tour });
+  } catch (error) {
+    return handleError(error, res);
+  }
+};
+
+exports.searchTour = async (req, res) => {
+  try {
+    const city = new RegExp(req.query.city, "i");
+    const distance = parseInt(req.query.distance);
+    const maxGroupSize = parseInt(req.query.maxGroupSize);
+
+    const tour = await TourService.searchTourService(
+      city,
+      distance,
+      maxGroupSize
+    );
+    return res.status(STATUS_CODE.OK).json({ message: "Successful", tour });
+  } catch (error) {
+    return handleError(error, res);
+  }
+};
+
+exports.featuredTour = async (req, res) => {
+  try {
+    const tour = await TourService.searchFeaturedTourService();
     return res
-      .status(STATUS_CODE.CREATED)
-      .json({ message: "Successful", tour });
+      .status(STATUS_CODE.OK)
+      .json({ message: "Successful", count: tour.length, data: tour });
+  } catch (error) {
+    return handleError(error, res);
+  }
+};
+
+exports.getTourCount = async (req, res) => {
+  try {
+    const getTourCount = await TourService.getTourCountService();
+    return res
+      .status(STATUS_CODE.OK)
+      .json({ message: "Successful", data: getTourCount });
   } catch (error) {
     return handleError(error, res);
   }
