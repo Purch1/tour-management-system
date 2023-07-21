@@ -28,12 +28,12 @@ exports.updateTour = async (req, res) => {
 
 exports.getAllTour = async (req, res) => {
   try {
-    const page = parseInt(req.query.page);
-    const getAllTour = await TourService.getAllTourService(page);
+    const page = parseInt(req.query.page) || 0;
+    const getAllTours = await TourService.getAllTourService(page);
     return res.status(STATUS_CODE.OK).json({
       message: "Successful",
-      count: getAllTour.length,
-      data: getAllTour,
+      count: getAllTours.length,
+      data: getAllTours,
     });
   } catch (error) {
     return handleError(error, res);
@@ -50,7 +50,7 @@ exports.getTourById = async (req, res) => {
         .status(STATUS_CODE.NOT_FOUND)
         .json({ error: "Tour not found" });
     }
-    return res.status(STATUS_CODE.Ok).json({ message: "Successful", tour });
+    return res.status(STATUS_CODE.OK).json({ message: "Successful", tour });
   } catch (error) {
     return handleError(error, res);
   }

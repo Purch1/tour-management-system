@@ -7,9 +7,11 @@ const {
   deleteUserById,
 } = require("../controllers/userController");
 
-router.put("/:id", updateUser);
-router.get("/", getAllUser);
-router.get("/:id", getUserById);
-router.delete("/:id", deleteUserById);
+const { verifyUser, verifyAdmin } = require('../utils/verifyToken')
+
+router.put("/:id", verifyUser, updateUser);
+router.get("/", verifyAdmin, getAllUser);
+router.get("/:id", verifyUser,getUserById);
+router.delete("/:id", verifyAdmin, deleteUserById);
 
 module.exports = router;

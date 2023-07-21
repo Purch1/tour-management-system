@@ -1,4 +1,5 @@
 const Tour = require("../models/tourModel");
+const Review = require("../models/reviewsModel");
 
 (exports.createTourService = async (tourData) => {
   const tour = new Tour(tourData);
@@ -13,15 +14,18 @@ const Tour = require("../models/tourModel");
     return updateTour;
   });
 
-exports.getAllTourService = async (page) => {
-  const getAllTour = await Tour.find()
-    .skip(page * 4)
-    .limit(4);
+exports.getAllTourService = async (page = 0) => {
+  const itemsPerPage = 8;
+  const skipValue = page * itemsPerPage;
+  const getAllTour = await Tour.find({})
+    .populate("reviews")
+    .skip(skipValue)
+    .limit(itemsPerPage);
   return getAllTour;
 };
 
 exports.getTourService = async (id) => {
-  const getTour = await Tour.findById(id);
+  const getTour = await Tour.findById(id).populate("reviews");
   return getTour;
 };
 
@@ -30,21 +34,21 @@ exports.searchTourService = async (city, distance, maxGroupSize) => {
     city,
     distance: { $gte: distance },
     maxGroupSize: { $gte: maxGroupSize },
-  });
+  }).populate("reviews");
   return searchTour;
 };
 
 exports.searchFeaturedTourService = async () => {
-    const featuredTour = await Tour.find({ featured:true })
+  const featuredTour = await Tour.find({ featured: true })
+    .populate("reviews")
     .limit(4);
-    return featuredTour;
-  };
+  return featuredTour;
+};
 
-  exports.getTourCountService = async () => {
-    const getTourCount = await Tour.estimatedDocumentCount()
-    .limit(4);
-    return getTourCount;
-  };
+exports.getTourCountService = async () => {
+  const getTourCount = await Tour.estimatedDocumentCount().limit(4);
+  return getTourCount;
+};
 
 exports.deleteTourService = async (id) => {
   const getTour = await Tour.findByIdAndDelete(id);

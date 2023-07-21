@@ -35,7 +35,7 @@ const tourSchema = new mongoose.Schema(
       type: Number,
       required: true,
     },
-    review: [
+    reviews: [
       {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Review",
