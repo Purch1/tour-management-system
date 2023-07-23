@@ -7,11 +7,11 @@ const {
   deleteUserById,
 } = require("../controllers/userController");
 
-const { verifyUser, verifyAdmin } = require('../utils/verifyToken')
+const {verifyUser, verifyAdmin}  = require('../middlewares/auth')
 
 router.put("/:id", verifyUser, updateUser);
 router.get("/", verifyAdmin, getAllUser);
-router.get("/:id", verifyUser,getUserById);
+router.get("/:id", verifyUser, getUserById);
 router.delete("/:id", verifyAdmin, deleteUserById);
 
 module.exports = router;

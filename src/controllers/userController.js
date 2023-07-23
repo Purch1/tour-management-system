@@ -3,7 +3,6 @@ const { STATUS_CODE } = require("../utils/constants");
 const { handleError } = require("../utils/errorHandler");
 
 
-
 exports.updateUser = async (req, res) => {
   try {
     const { id } = req.params;
@@ -41,8 +40,9 @@ exports.getUserById = async (req, res) => {
         .status(STATUS_CODE.NOT_FOUND)
         .json({ error: "User not found" });
     }
-    return res.status(STATUS_CODE.Ok).json({ message: "Successful", data: user });
+    return res.status(STATUS_CODE.OK).json({ message: "Successful", data: user });
   } catch (error) {
+    console.log(error.message)
     return handleError(error, res);
   }
 };

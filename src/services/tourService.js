@@ -1,18 +1,18 @@
 const Tour = require("../models/tourModel");
 const Review = require("../models/reviewsModel");
 
-(exports.createTourService = async (tourData) => {
+exports.createTourService = async (tourData) => {
   const tour = new Tour(tourData);
   await tour.save();
   return tour;
-}),
-  (exports.updateTourService = async (id, tourData) => {
-    const updateTour = await Tour.findByIdAndUpdate(id, tourData, {
-      new: true,
-    });
-    await updateTour.save();
-    return updateTour;
+};
+
+exports.updateTourService = async (id, tourDat) => {
+  const updateTour = await Tour.findByIdAndUpdate(id, tourDat, {
+    new: true,
   });
+  return updateTour;
+};
 
 exports.getAllTourService = async (page = 0) => {
   const itemsPerPage = 8;

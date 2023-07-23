@@ -16,10 +16,11 @@ exports.createTour = async (req, res) => {
 exports.updateTour = async (req, res) => {
   try {
     const { id } = req.params;
-
-    const updatedTour = await TourService.updateTourService(id, req.body);
+    const {title, city } = req.body
+    
+    const updatedTour = await TourService.updateTourService(id, { title, city});
     return res
-      .status(STATUS_CODE.Ok)
+      .status(STATUS_CODE.OK)
       .json({ message: "Successful", data: updatedTour });
   } catch (error) {
     return handleError(error, res);

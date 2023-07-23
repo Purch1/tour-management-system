@@ -10,15 +10,17 @@ const {
   featuredTour,
   getTourCount,
 } = require("../controllers/tourController");
-const { verifyAdmin } = require('../utils/verifyToken')
+const {verifyUser, verifyAdmin}  = require('../middlewares/auth')
 
-router.post("/", createTour);
+router.post("/", verifyAdmin, createTour);
 router.put("/:id", verifyAdmin, updateTour);
 router.get("/", getAllTour);
 router.get("/:id", getTourById);
+router.delete("/:id", verifyAdmin, deleteTourById);
+
+//Get  tour by search
 router.get("/search/getTour", searchTour);
 router.get("/search/featureTour", featuredTour);
 router.get("/search/getTourCount", getTourCount);
-router.delete("/:id", verifyAdmin, deleteTourById);
 
 module.exports = router;

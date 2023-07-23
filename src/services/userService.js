@@ -1,6 +1,6 @@
 const User = require("../models/userModel");
 
-exports.updateUserService = async (id, UserData) => {
+exports.updateUserService = async (id, userData) => {
   const updateUser = await User.findByIdAndUpdate(id, userData, {
     new: true,
   });
@@ -10,8 +10,6 @@ exports.updateUserService = async (id, UserData) => {
 
 exports.getAllUserService = async (page) => {
   const getAllUser = await User.find()
-    .skip(page * 4)
-    .limit(4);
   return getAllUser;
 };
 

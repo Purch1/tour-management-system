@@ -1,5 +1,4 @@
 const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
 const AuthService = require("../services/authService");
 const { STATUS_CODE } = require("../utils/constants");
 const { handleError } = require("../utils/errorHandler");
@@ -44,24 +43,11 @@ exports.loginUser = async (req, res) => {
         .json({ error: "Incorrect email or password" });
     }
 
-    const { password, role, ...rest } = user._doc;
+    const token = user.generateAuthToken()
 
-    //Create jwt token
-    const token = jwt.sign(
-      { id: user._id, role: user.role },
-      process.env.JWT_SECRET_KEY,
-      { expiresIn: "15d" }
-    );
-
-    //set token in the broswer cookies and send reponse to client
-    res.cookie("accessToken", token, {
-      httpOnly: true,
-      expiresIn: token.expiresIn,
-    })
-
-    // return res
+    return res
       .status(STATUS_CODE.CREATED)
-      .json({ token, message: "Login succesfully", data: {...rest }, role });
+      .json({ token, message: "Login succesfully", data: user });
   } catch (error) {
     return handleError(error, res);
   }
