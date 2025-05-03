@@ -9,7 +9,7 @@ env:
   ACR_NAME: testcicdwithdockerw
   APP_NAME: tour-system
   RESOURCE_GROUP: Testing_account
-  IMAGE_NAME: TestCicdwithDockerW
+  IMAGE_NAME: testcicdwithdockerw  # All lowercase
 
 jobs:
   build:
