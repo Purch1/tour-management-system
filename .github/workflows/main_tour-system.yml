@@ -9,42 +9,47 @@ env:
   ACR_NAME: testcicdwithdockerw
   APP_NAME: tour-system
   RESOURCE_GROUP: Testing_account
-  IMAGE_NAME: testcicdwithdockerw  # All lowercase
+  IMAGE_NAME: testcicdwithdockerw  # all lowercase
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
+      - uses: actions/checkout@v3
 
-    - name: Login to Azure
-      uses: azure/login@v1
-      with:
-        creds: ${{ secrets.AZURE_CREDENTIALS }}
+      - name: Azure Login
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-    - name: Login to ACR
-      uses: azure/docker-login@v1
-      with:
-        login-server: ${{ env.ACR_NAME }}.azurecr.io
-        username: ${{ secrets.ACR_USERNAME }}
-        password: ${{ secrets.ACR_PASSWORD }}
+      - name: Azure Container Registry Login
+        uses: azure/docker-login@v1
+        with:
+          login-server: ${{ env.ACR_NAME }}.azurecr.io
+          username: ${{ secrets.ACR_USERNAME }}
+          password: ${{ secrets.ACR_PASSWORD }}
 
-    - name: Build and push
-      uses: docker/build-push-action@v3
-      with:
-        push: true
-        tags: |
-          ${{ env.ACR_NAME }}.azurecr.io/${{ env.IMAGE_NAME }}:${{ github.sha }}
-          ${{ env.ACR_NAME }}.azurecr.io/${{ env.IMAGE_NAME }}:latest
-        file: ./Dockerfile
+      - name: Build and Push Docker Image
+        uses: docker/build-push-action@v3
+        with:
+          push: true
+          tags: |
+            ${{ env.ACR_NAME }}.azurecr.io/${{ env.IMAGE_NAME }}:${{ github.sha }}
+            ${{ env.ACR_NAME }}.azurecr.io/${{ env.IMAGE_NAME }}:latest
+          file: ./Dockerfile
 
   deploy:
     needs: build
     runs-on: ubuntu-latest
     steps:
-    - name: Deploy to Web App
-      uses: azure/webapps-deploy@v2
-      with:
-        app-name: ${{ env.APP_NAME }}
-        resource-group: ${{ env.RESOURCE_GROUP }}
-        images: ${{ env.ACR_NAME }}.azurecr.io/${{ env.IMAGE_NAME }}:${{ github.sha }}
+      - name: Azure Login
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Deploy to Web App
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: ${{ env.APP_NAME }}
+          resource-group-name: ${{ env.RESOURCE_GROUP }}
+          images: ${{ env.ACR_NAME }}.azurecr.io/${{ env.IMAGE_NAME }}:${{ github.sha }}
