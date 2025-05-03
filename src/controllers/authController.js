@@ -1,4 +1,4 @@
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 const AuthService = require("../services/authService");
 const { STATUS_CODE } = require("../utils/constants");
 const { handleError } = require("../utils/errorHandler");
