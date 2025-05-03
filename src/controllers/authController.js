@@ -17,7 +17,7 @@ exports.registerUser = async (req, res) => {
     });
     return res
       .status(STATUS_CODE.CREATED)
-      .json({ message: "Created succesfully", data: user });
+      .json({ message: "User created succesfully", data: user });
   } catch (error) {
     return handleError(error, res);
   }
